@@ -1,4 +1,4 @@
-# t3
+# vue3framework
 
 ## Project setup
 ```
