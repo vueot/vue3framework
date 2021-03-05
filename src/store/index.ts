@@ -1,14 +1,11 @@
-import { createStore } from 'vuex'
-import * as _ from 'lodash'
+import {createStore} from 'vuex'
+import header from './layout/header'
 
 export default createStore({
-  state: {
-    _,
-  },
-  mutations: {
-  },
-  actions: {
-  },
+  state: () => ({}),
+  mutations: {},
+  actions: {},
   modules: {
+    header,
   }
 })

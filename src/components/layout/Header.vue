@@ -39,17 +39,9 @@
       </el-menu-item>
     </el-menu>
     <el-menu>
-      <el-menu-item index="2">
-        <i class="el-icon-location"></i>
-        <template #title>导航二</template>
-      </el-menu-item>
-      <el-menu-item index="3" disabled>
-        <i class="el-icon-document"></i>
-        <template #title>导航三</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <i class="el-icon-setting"></i>
-        <template #title>导航四</template>
+      <el-menu-item :index="v.route" v-for="(v, i) in getters['header/collectionService']" :key="i">
+        <i :class="v.icon"></i>
+        <template #title>{{ v.name }}</template>
       </el-menu-item>
     </el-menu>
   </el-drawer>
@@ -66,7 +58,22 @@
          @click="showServiceList=false"
          style="float: right; font-size: 25px; cursor:pointer"
       ></i>
-      xxxxxxxxxxxxxxxxxxxxxxxxx
+      <div v-for="(v, i) in state.header.service" :key="i">
+        <h4 style="margin-bottom: 20px">{{ v.name }}</h4>
+        <div v-for="(v2, i2) in v.data" :key="i2" style="margin: 10px 0">
+          <span class="service-link">
+            <span
+                @click="toService(v2)"
+                style="width: 300px; display: inline-block"
+            >{{ v2.name }}</span>
+            <i
+                :class="v2.is_collection?'el-icon-star-on':'el-icon-star-off'"
+                @click.stop="commit('header/service', [i, i2, !v2.is_collection])"
+            ></i>
+          </span>
+        </div>
+
+      </div>
     </el-main>
   </el-drawer>
 </template>
@@ -89,14 +96,20 @@ export default defineComponent({
     }
   },
   setup() {
-    const {commit, state} = useStore()
+    const {commit, state, getters} = useStore()
+    console.log(getters)
     return {
-      commit, state
+      commit, state, getters
     }
   },
   methods: {
     closeNavigation() {
       this.showServiceList = false
+    },
+    toService(v: any) {
+      this.$router.push({
+        path: v.route
+      })
     }
   }
 })
@@ -124,6 +137,19 @@ export default defineComponent({
 .logo {
   height: 100%;
 }
+
+.service-link {
+  color: #666;
+}
+
+.service-link:hover {
+  background-color: #D3DCE6;
+}
+
+.service-link:hover {
+  background-color: #D3DCE6;
+}
+
 </style>
 
 <style>
@@ -155,5 +181,6 @@ export default defineComponent({
 .service-list {
   padding-top: 50px;
   width: 100% !important;
+  max-width: 980px;
 }
 </style>
