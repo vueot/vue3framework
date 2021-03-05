@@ -1,31 +1,40 @@
 <template>
-  <div class="header" :style="{
-    height: size+' !important',
-    'line-height': size,
-  }">
-    <i
-        :class="showNavigation?'el-icon-s-fold':'el-icon-s-unfold'"
-        class="icon"
-        :style="{
-        height: size,
-        width: size,
+  <div
+      class="header"
+      :class="navigationModal?'show-navigation-modal':'not-show-navigation-modal'"
+      :style="{
+        height: size+' !important',
         'line-height': size,
-        'font-size': fontSize
       }"
-        @click="showNavigation=!showNavigation"
-    ></i>
+  ><i
+      :class="showNavigation?'el-icon-s-fold':'el-icon-s-unfold'"
+      class="icon"
+      :style="{
+          height: size,
+          width: size,
+          'line-height': size,
+          'font-size': fontSize
+        }"
+      @click="showNavigation=!showNavigation"
+  ></i>
     <img alt="" src="../../assets/logo.png" class="logo">
   </div>
   <el-drawer
       v-model="showNavigation"
       custom-class="header-drawer"
       direction="ltr"
+      :modal="navigationModal"
+      @close="closeNavigation"
       :show-close="false"
       :withHeader="false">
-    <el-menu background-color="#e9e9eb" active-text-color="#409eff">
+    <el-menu
+        background-color="#e9e9eb"
+        active-text-color="#409eff"
+        @select="showServiceList=!showServiceList"
+        :default-active="showServiceList+0+''">
       <el-menu-item index="1">
         <i class="el-icon-menu"></i>
-        <span>导航一</span>
+        <span>服务列表</span>
         <i class="el-icon-arrow-right" style="float: right; line-height: 56px"></i>
       </el-menu-item>
     </el-menu>
@@ -44,6 +53,22 @@
       </el-menu-item>
     </el-menu>
   </el-drawer>
+  <el-drawer
+      v-model="showServiceList"
+      custom-class="service-list"
+      direction="ltr"
+      :show-close="false"
+      @open="navigationModal=false"
+      @close="navigationModal=true"
+      :withHeader="false">
+    <el-main>
+      <i class="el-icon-close"
+         @click="showServiceList=false"
+         style="float: right; font-size: 25px; cursor:pointer"
+      ></i>
+      xxxxxxxxxxxxxxxxxxxxxxxxx
+    </el-main>
+  </el-drawer>
 </template>
 
 <script lang="ts">
@@ -58,6 +83,8 @@ export default defineComponent({
       size: size + 'px',
       showHeader: true,
       showNavigation: false,
+      navigationModal: true,
+      showServiceList: false,
       fontSize: Math.ceil(size * 0.6) + 'px',
     }
   },
@@ -67,6 +94,11 @@ export default defineComponent({
       commit, state
     }
   },
+  methods: {
+    closeNavigation() {
+      this.showServiceList = false
+    }
+  }
 })
 </script>
 
@@ -77,7 +109,7 @@ export default defineComponent({
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) !important;
   -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) !important;
   position: relative;
-  z-index: 5000;
+  z-index: 10000;
   width: 100%;
 }
 
@@ -98,5 +130,30 @@ export default defineComponent({
 .header-drawer {
   padding-top: 50px;
   width: 240px !important;
+  pointer-events: auto;
+}
+
+.header + div {
+  z-index: 9000 !important;
+}
+
+.show-navigation-modal + div {
+  background-color: #0002;
+  pointer-events: auto;
+}
+
+.not-show-navigation-modal + div {
+  pointer-events: none;
+}
+
+.header + div + div {
+  z-index: 8000 !important;
+  left: 240px !important;
+  background-color: #0002;
+}
+
+.service-list {
+  padding-top: 50px;
+  width: 100% !important;
 }
 </style>
