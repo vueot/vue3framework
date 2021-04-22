@@ -97,7 +97,6 @@ export default defineComponent({
   },
   setup() {
     const {commit, state, getters} = useStore()
-    console.log(getters)
     return {
       commit, state, getters
     }

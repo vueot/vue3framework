@@ -1,48 +1,54 @@
 <template>
-  <el-container>
-    <el-form>
-      <div v-drag style="position: relative">
-        <el-form-item label="单选框">
-          <el-radio-group>
-            <el-radio :label="3">备选项</el-radio>
-            <el-radio :label="6">备选项</el-radio>
-            <el-radio :label="9">备选项</el-radio>
-          </el-radio-group>
-        </el-form-item>
+  <div>
+    <draggable v-model="list">
+      <div
+          v-for="element in list"
+          :key="element.name"
+      >
+        {{ element.name }}
       </div>
-    </el-form>
-  </el-container>
+    </draggable>
+  </div>
 </template>
 
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {useStore} from "vuex";
+import {VueDraggableNext} from "vue-draggable-next"
 
 export default defineComponent({
   name: "CreateForm",
+  components: {
+    draggable: VueDraggableNext,
+  },
   setup() {
     const {commit, state} = useStore()
-    console.log(_.forEach([1,2,3], v=>{
-      console.log(v)
-    }))
     return {
-      commit, state
-    }
-  },
-  directives: {
-    drag(el) {
-      console.log(el)
-      el.onmousedown = function (e: { pageX: number; pageY: number; }) {
-        const disx = e.pageX - el.offsetLeft;
-        const disy = e.pageY - el.offsetTop;
-        document.onmousemove = function (e) {
-          el.style.left = e.pageX - disx + 'px'
-          el.style.top = e.pageY - disy + 'px'
+      commit, state,
+      list: [
+        {
+          name: "task 1",
+          tasks: [
+            {
+              name: "task 2",
+              tasks: []
+            }
+          ]
+        },
+        {
+          name: "task 3",
+          tasks: [
+            {
+              name: "task 4",
+              tasks: []
+            }
+          ]
+        },
+        {
+          name: "task 5",
+          tasks: []
         }
-        document.onmouseup = function () {
-          document.onmousemove = document.onmouseup = null
-        }
-      }
+      ]
     }
   }
 })
